@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: This template creates an EC2 instance to run a static website with Apache Web Server
+Resources:
+  AlparslanCFInstance: 
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0a8b4cd432b1c3063
+      InstanceType: t2.micro
+      KeyName: firstkey
+      SecurityGroups:
+        - SSH-HTTP
+      Tags:
+        - Key: Name
+          Value: Web server of Kittens Carousel
+      UserData:
+        Fn::Base64:
+          !Sub |
+          #! /bin/bash
+          sudo yum update -y
+          sudo yum install httpd -y
+          sudo systemctl start httpd
+          sudo systemctl enable httpd
+          sudo chmod -R 777 /var/www/html
+          cd /var/www/html
+          wget https://raw.githubusercontent.com/alpi1977/101-kittens-carousel-static-website-ec2/main/index.html
+          wget https://raw.githubusercontent.com/alpi1977/101-kittens-carousel-static-website-ec2/blob/main/cat0.jpg
+          wget https://raw.githubusercontent.com/alpi1977/101-kittens-carousel-static-website-ec2/blob/main/cat1.jpg
+          wget https://raw.githubusercontent.com/alpi1977/101-kittens-carousel-static-website-ec2/blob/main/cat2.jpg
+          wget https://raw.githubusercontent.com/alpi1977/101-kittens-carousel-static-website-ec2/blob/main/cat3.png
+      
